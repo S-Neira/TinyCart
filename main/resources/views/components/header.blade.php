@@ -8,7 +8,7 @@
         <ul class="flex gap-20 font-semibold">
             <li class="hover:underline"><a href="#">Inicio</a></li>
             <li class="hover:underline"><a href="">Poductos</a></li>
-            <li class="hover:underline"><a href="">Nosotros</a></li>
+            <li class="hover:underline"><a href="https://github.com/S-Neira/Me">Nosotros</a></li>
         </ul>
 
         <ul class="flex gap-5 mr-10">
