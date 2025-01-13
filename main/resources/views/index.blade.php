@@ -206,7 +206,7 @@
                         <div class="flex gap-5">
                             <button 
                                 @click="actualProduct = title[n-1] ; notification.show()" 
-                                class="font-semibold w-auto bg-gray-400 text-white rounded-md p-2 hover:bg-gray-500 transition-all"
+                                class="font-semibold w-auto bg-gray-400 text-white rounded-md p-2 hover:bg-gray-500 transition-all
                             >
                                 Añadir al Carro
                             </button>
