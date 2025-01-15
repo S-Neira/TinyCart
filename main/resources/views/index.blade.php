@@ -144,7 +144,7 @@
         <div 
         x-data="{
             range: Array.from({ length: 8 }, (_, i) => i + 1),
-            title: ['Chaqueta Canguro', 'Parka', 'Casual', 'Office', 'Formal', 'Deportivo', 'Verano', 'Invierno'],
+            title: ['Chaqueta Canguro', 'Parka', 'Casual', 'Office', 'Formal', 'Deportivo', 'Invierno', 'Verano'],
             notification: {
                 visible: false,
                 timeout: 5000,

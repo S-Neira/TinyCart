@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -12,7 +12,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Products::all();
+        $products = Product::all();
         return view('admin', compact('products'));
     }
 
@@ -57,8 +57,9 @@ class ProductController extends Controller
             $validatedData['image'] = $imagePath; // Ruta para guardaren la base de datos.
         }
 
-        Products::create($validatedData);
-        $this->index();
+        Product::create($validatedData);
+
+        return redirect()->route('products.index')->with('Success', 'Producto guardado exitosamente.');
     }
 
     /**
@@ -66,8 +67,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Products::find($id);
-        return view('products.show', compact('product'));
+        $product = Product::find($id);
+        return view('admin', compact('product'));
     }
 
     /**
@@ -75,7 +76,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product =  Product::find($id);
+        return view('products.edit', compact('product')); 
     }
 
     /**
@@ -83,7 +85,35 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $product = Product::find($id);
+
+        $validatedData = $request->validate(
+            [
+                'name' => 'string|max:255',
+                'description' => 'max:500',
+                'price' => 'numeric',
+                'image' => 'file|mimes:jpeg,png,jpg,gif,webp|max:10240',
+            ],
+            [
+                'name.max' => 'El nombre no puede ser más largo que 255 caracteres',
+                'price.numeric' => 'El precio debe ser un número.',
+                'image.mimes' => 'La imagen debe ser un archivo de tipo: jpeg, png, jpg, gif.',
+                'image.max' => 'La imagen no puede ser mayor a 10MB.',
+            ]
+        );
+
+        
+        //Guardar la imagen si es nueva
+        if($request->hasFile('image') && $request->image !== $product->image ){
+            //Guardar en el almacenamiento publico
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image'] = $imagePath; // Ruta para guardaren la base de datos.
+        }
+
+        $product->update($validatedData);
+
+        return redirect()->route('products.index')->with('Success', 'Producto actualizado exitosamente.');
     }
 
     /**
@@ -91,6 +121,18 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Busca el producto por ID
+        $product = Product::find($id);
+    
+        // Verifica si el producto existe
+        if (!$product) {
+            return redirect()->route('products.index')->with('success','Producto no encontrado');
+        }
+    
+        // Elimina el producto
+        $product->delete();
+    
+        // Redirige a la lista de productos con un mensaje de éxito
+        return redirect()->route('products.index')->with('success', 'Producto eliminado exitosamente');
     }
 }

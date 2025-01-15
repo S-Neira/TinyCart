@@ -1,4 +1,4 @@
-<header class="flex gap-[30%] items-center">
+<header class="flex gap-[25%] items-center">
 
     
     <img src="{{asset('img/logo.webp')}}" alt="" class="max-w-[10%] rounded-full" >
@@ -9,6 +9,17 @@
             <li class="hover:underline"><a href="/">Inicio</a></li>
             <li class="hover:underline"><a href="">Poductos</a></li>
             <li class="hover:underline"><a href="https://github.com/S-Neira/Me">Nosotros</a></li>
+
+            @auth
+                <li class="hover:underline">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="text-red-500 hover:underline">Cerrar Sesión</button>
+                    </form>
+                </li>
+            @else
+                <li class="hover:underline"><a href="{{route('login-form')}}">Admin</a></li>
+            @endauth
         </ul>
 
         <ul class="flex gap-5 mr-10">
