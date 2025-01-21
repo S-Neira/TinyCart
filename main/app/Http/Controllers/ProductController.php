@@ -36,6 +36,7 @@ class ProductController extends Controller
                 'description' => 'required|max:500',
                 'price' => 'required|numeric',
                 'image' => 'required|file|mimes:jpeg,png,jpg,gif,webp|max:10240',
+                'inventory' => 'nullable|numeric|min:0',
             ],
             [
                 'name.required' => 'El nombre del producto es obligatorio.',
@@ -45,6 +46,7 @@ class ProductController extends Controller
                 'image.required' => 'Por favor, sube una imagen del producto.',
                 'image.mimes' => 'La imagen debe ser un archivo de tipo: jpeg, png, jpg, gif.',
                 'image.max' => 'La imagen no puede ser mayor a 10MB.',
+                'inventory.min' => 'El inventario debe ser un numero natural o 0',
             ]
         );
 
@@ -55,6 +57,9 @@ class ProductController extends Controller
             //Guardar en el almacenamiento publico
             $imagePath = $request->file('image')->store('products', 'public');
             $validatedData['image'] = $imagePath; // Ruta para guardaren la base de datos.
+
+            // optimizar la imagen
+            //ImageController::optimizeImage($imagePath); TODO: Solucionar problema con IMAGICK.
         }
 
         Product::create($validatedData);
@@ -94,12 +99,14 @@ class ProductController extends Controller
                 'description' => 'max:500',
                 'price' => 'numeric',
                 'image' => 'file|mimes:jpeg,png,jpg,gif,webp|max:10240',
+                'inventory' => 'nullable|numeric|min:0',
             ],
             [
                 'name.max' => 'El nombre no puede ser más largo que 255 caracteres',
                 'price.numeric' => 'El precio debe ser un número.',
                 'image.mimes' => 'La imagen debe ser un archivo de tipo: jpeg, png, jpg, gif.',
                 'image.max' => 'La imagen no puede ser mayor a 10MB.',
+                'inventory.min' => 'El inventario debe ser un numero natural o 0',
             ]
         );
 
@@ -134,5 +141,18 @@ class ProductController extends Controller
     
         // Redirige a la lista de productos con un mensaje de éxito
         return redirect()->route('products.index')->with('success', 'Producto eliminado exitosamente');
+    }
+
+    public function inventory(){
+        // Obtener datos de inventario
+        $products = Product::all(); // Obtiene todos los productos
+        $labels = $products->pluck('name'); // Nombres de los productos
+        $data = $products->pluck('inventory'); // Cantidad en stock de cada producto
+
+        // Retornar la vista con los datos
+        return view('products.inventory', [
+            'labels' => $labels, // Pasar los nombres de los productos como etiquetas
+            'data' => $data, // Pasar las cantidades como datos
+        ]);
     }
 }

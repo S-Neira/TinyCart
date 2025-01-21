@@ -12,13 +12,19 @@
     
     <x-header></x-header>
 
-        <h1 class="text-4xl font-extrabold text-center text-gray-800 my-8 w-auto">Panel de control</h1>
+    <h1 class="text-4xl font-extrabold text-center text-gray-800 my-8 w-auto">
+        Panel de control
+    </h1>
 
+    {{-- Muesta este mensaje si no hay productos para mostrar --}}
 
-
-
+    @if($products->isEmpty())
+        <h1 class="font-extrabold text-2xl text-center text-gray-800 mb-5">
+            No tienes ningún producto todavía 😢
+        </h1>
+    @endif 
+        
     <main class="flex flex-col items-center gap-5">
-
 
         <a href="{{route('products.create')}}" class="bg-emerald-400 hover:bg-emerald-600 transition-all py-2 px-4 font-semibold rounded-md">
             Crear
@@ -30,13 +36,15 @@
             {{-- mostrar todos los  Productos --}}
             @foreach ($products as $product)
                 <div class="flex flex-col items-center justify-center gap-4">
-                    <img  src="{{ asset('storage/' . $product->image) }}" alt="Imagen de producto {{ $product->name }}">
+                    <img src="{{ asset('storage/products/' . $product->image) }}" alt="Imagen de producto {{ $product->name }}">
 
                     <h3 class="text-xl font-semibold">{{$product->name}}</h3>
                     <div class="flex gap-2">
                         <p class="text-lg font-semibold" >Precio: </p>
                         <p class="text-lg font-semibold text-emerald-500">{{$product->price}}</p>
                     </div>
+
+                    <h3 class="text-lg">Stock: {{$product->inventory}}</h3>
                     
                     <p class="text-md">{{$product->description}}</p>
         

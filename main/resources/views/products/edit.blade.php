@@ -46,6 +46,13 @@
                    type="number" name="price" id="price" placeholder="10000" required value="{{old('price', $product->price)}}">
         </div>
 
+        {{-- Campo Stock --}}
+        <div class="flex flex-col gap-2 w-full">
+            <label class="font-semibold text-lg hover:underline" for="inventory">Stock: </label>
+            <input class="border-2 border-gray-300 hover:border-emerald-400 focus:ring focus:ring-emerald-200 transition-all rounded-md p-2 w-full" 
+                    type="number" name="inventory" id="inventory" placeholder="0" value="{{$product->inventory}}">
+        </div>
+
         <!-- Campo Imagen -->
         <div class="flex flex-col gap-2 w-full">
             <label class="font-semibold text-lg hover:underline" for="image">Imagen:</label>
